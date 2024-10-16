@@ -168,7 +168,7 @@ body {
   }
   
   #task-list {
-    background-color: rgb(131, 195, 143);
+    /* background-color: rgb(131, 195, 143); */
     padding: 10px;
     margin: 5px 0;
     /* display: flex; */
