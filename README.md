@@ -21,5 +21,5 @@ Finally, using `node server.js` scpript to run the Node.js backend.
 
 ## Requirement
 
-* [Node.js](#https://nodejs.org/en)
-* [Mongodb (database)](#https://www.mongodb.com)
+* [Node.js](https://nodejs.org/en)
+* [Mongodb (database)](https://www.mongodb.com)
