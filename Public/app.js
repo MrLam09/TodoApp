@@ -1,12 +1,10 @@
 let taskToUpdateId = null;
 
-document.getElementById('task-form').addEventListener('submit', async function(event) {
-  event.preventDefault();
+document.getElementById('task').addEventListener('submit', async function() {
 
   const task = document.getElementById('task-input').value;
   const status = document.getElementById('status-input').value;
   const date = document.getElementById('date-input').value;
-
 
   const response = await fetch('/add-task', {
     method: 'POST',
@@ -204,3 +202,5 @@ document.getElementById('update-btn').addEventListener('click', async function()
 });
 
 fetchTasks();
+
+

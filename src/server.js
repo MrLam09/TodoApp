@@ -1,32 +1,106 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const path = require('path');
+
+const login = require('./login')
+const Task = require('./function');
+const { NONAME } = require('dns');
+
 
 const app = express();
 const PORT = 3000;
 
-mongoose.connect('mongodb://localhost:27017/', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+const viewsPath = path.join(__dirname, '../views');
 
-const taskSchema = new mongoose.Schema({
-  date: String,
-  task: String,
-  status: String,
-});
-
-const Task = mongoose.model('Task', taskSchema);
 
 app.use(bodyParser.json());
 app.use(express.static('public'));  
+app.use(express.urlencoded({ extended: false }));
+
+
+app.set('view engine', 'ejs');
+app.set('views', viewsPath);
+
+app.get('/', (req, res) => {
+  res.render('login');
+});
+
+app.get('/signup', (req, res) => {
+  res.render('signup');
+});
+
+app.get('/main', (req, res) => {
+  res.render('main');
+});
+
+
+// Register users
+app.post('/signup', async (req, res) => {
+  const data = {
+    username: req.body.username,
+    password: req.body.password
+  }
+
+  const existingUser = await login.findOne({ username: data.username });
+
+  if (existingUser) {
+    return res.status(400).json({ message: 'Username already exists' });
+  }
+  else{
+    try {
+
+      // Hash the password
+      const saltRounds = 10;
+      const hashedPassword = await bcrypt.hash(data.password, saltRounds);
+      data.password = hashedPassword;
+
+      // Save new user
+      const user = await new login(data).save();
+      console.log(user);
+
+      res.render('login');
+    } catch (error) {
+        res.status(500).json({ message: 'Error registering user' });
+    }
+  }
+})
+
+// Login users
+app.post('/login', async (req, res) => {
+  const data = {
+    username: req.body.username,
+    password: req.body.password
+  }
+  try{
+  const user = await login.findOne({ username: data.username });
+
+  if (!user) {
+    return res.status(400).json({ message: 'User not found' });
+  }
+  else{
+    const validPassword = await bcrypt.compare(data.password, user.password);
+    if (!validPassword) { 
+      return res.status(400).json({ message: 'Invalid password' });
+    }
+    else{
+      res.render('main');
+    }}
+  } catch (error) {
+    res.status(500).json({ message: 'Username or password incorrect' });
+  }
+})
 
 // POST route to add a task
-app.post('/add-task', async (req, res) => {
+app.post('/main', async (req, res) => {
   try {
+
     const task = new Task({ date: req.body.date, task: req.body.task, status: req.body.status });
+    console.log(task);
     await task.save();
-    res.json({ message: 'Task saved successfully!' });
+    res.render('main');
+
   } catch (error) {
     res.status(500).json({ message: 'Error saving task' });
   }
@@ -99,6 +173,8 @@ app.put('/update-status/:id', async (req, res) => {
     res.status(500).json({ message: 'Error updating status' });
   }
 });
+
+
 
 // Start the server
 app.listen(PORT, () => {
