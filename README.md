@@ -10,6 +10,8 @@ Todo App provides 4 main functions below:
 * Search: Search your scheduled tasks by task name.
 * Update: Update your task name, date and status.
 * Delete: Remove task from your calenda.
+  
+[Update] I newly added sign in feature, become a part of TodoApp community as quick as possible !!! 
 
 ## How to install?
 
@@ -23,11 +25,13 @@ git clone git@github.com:MrLam09/TodoApp.git
 
 Going to the clone file, opening terminal and install some node modules:
 ```
-npm install express mongoose body-parser
+npm install express mongoose body-parser ejs bcrypt
 ```
-Finally, using `node server.js` scpript to run the Node.js backend.
+
+Finally, using `node src/server.js` scpript to run the Node.js backend.
 
 ## Requirement
 
 * [Node.js](https://nodejs.org/en)
 * [Mongodb (database)](https://www.mongodb.com)
+
