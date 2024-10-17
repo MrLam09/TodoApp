@@ -1,30 +1,5 @@
 let taskToUpdateId = null;
 
-document.getElementById('task').addEventListener('submit', async function() {
-
-  const task = document.getElementById('task-input').value;
-  const status = document.getElementById('status-input').value;
-  const date = document.getElementById('date-input').value;
-
-  const response = await fetch('/add-task', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ date: date, task: task , status: status })
-  });
-
-  const result = await response.json();
-  console.log(result.message);
-
-
-  document.getElementById('task-input').value = '';
-  document.getElementById('status-input').value = '';
-  document.getElementById('date-input').value = '';
-  
-  fetchTasks();
-});
-
 
 async function fetchTasks() {
   const response = await fetch('/get-tasks');

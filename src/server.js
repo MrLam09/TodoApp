@@ -1,12 +1,10 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const path = require('path');
 
 const login = require('./login')
 const Task = require('./function');
-const { NONAME } = require('dns');
 
 
 const app = express();
